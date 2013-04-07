@@ -11,3 +11,7 @@
 *.lai
 *.la
 *.a
+
+# Intermediate Xcode workspace.
+*.xcworkspace/
+xcuserdata/

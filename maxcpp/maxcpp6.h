@@ -79,6 +79,14 @@ THE SOFTWARE.
 	A_LONG,												\
 	0);
 	
+// NICK: for A_SYM methods (t_symbol *s):
+#define REGISTER_METHOD_SYMBOL(CLASS, METHOD)	class_addmethod(	\
+(t_class *)CLASS::m_class,								\
+(method)CLASS::MaxMethodSymbol<&CLASS::METHOD>::call,	\
+#METHOD,												\
+A_SYM,												\
+0);
+
 // for DSP
 #define REGISTER_PERFORM(CLASS, METHOD) object_method( \
 	dsp64, \
@@ -121,6 +129,12 @@ public:
 		static void call(T * x, double v) { ((x)->*F)(proxy_getinlet((t_object *)x), v); }
 	};
 
+    // NICK: for A_SYM:
+	typedef void (T::*maxmethodsymbol)(long inlet, t_symbol *s);
+	template<maxmethodsymbol F>
+	struct MaxMethodSymbol {
+		static void call(T * x, t_symbol *s) { ((x)->*F)(proxy_getinlet((t_object *)x), s); }
+	};
 };
 
 // note: only include this file once to prevent linker errors!
